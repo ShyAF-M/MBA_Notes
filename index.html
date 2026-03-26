@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>法律筆記</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0e0c;
+  --bg2: #161410;
+  --bg3: #1d1b17;
+  --bg4: #242220;
+  --gold: #c9a84c;
+  --gold-dim: #9a7c32;
+  --gold-line: rgba(201,168,76,0.25);
+  --text: #f2ede4;
+  --text-mid: #c8bfae;
+  --text-dim: #8a8070;
+  --rule: rgba(255,255,255,0.06);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  padding: 120px 40px 100px;
+  text-align: center;
+  overflow: hidden;
+  background: var(--bg2);
+  border-bottom: 1px solid var(--rule);
+}
+
+.header-grid {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.035) 1px, transparent 1px);
+  background-size: 56px 56px;
+  mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, black 20%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 70% 100% at 50% 0%, black 20%, transparent 100%);
+}
+
+.header-corner {
+  position: absolute;
+  width: 80px; height: 80px;
+  border-color: var(--gold-line);
+  border-style: solid;
+  opacity: 0.5;
+}
+.tl { top: 28px; left: 28px; border-width: 1px 0 0 1px; }
+.tr { top: 28px; right: 28px; border-width: 1px 1px 0 0; }
+.bl { bottom: 28px; left: 28px; border-width: 0 0 1px 1px; }
+.br { bottom: 28px; right: 28px; border-width: 0 1px 1px 0; }
+
+.header-inner {
+  position: relative;
+  z-index: 2;
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+.eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  opacity: 0;
+  animation: fadeUp 0.7s ease forwards 0.1s;
+}
+
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(40px, 6vw, 64px);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--text);
+  margin-bottom: 6px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.25s;
+}
+
+header h1 em {
+  font-style: italic;
+  color: var(--gold);
+}
+
+.header-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-style: italic;
+  color: var(--text-mid);
+  margin-top: 10px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.38s;
+}
+
+.header-orn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.5s;
+}
+.header-orn::before, .header-orn::after {
+  content: '';
+  width: 56px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line));
+}
+.header-orn::after { background: linear-gradient(90deg, var(--gold-line), transparent); }
+.orn-gem { width: 5px; height: 5px; background: var(--gold-dim); transform: rotate(45deg); }
+
+/* ── MAIN ── */
+main {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 72px 32px 100px;
+}
+
+/* ── SECTION LABEL ── */
+.section-label {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 28px;
+}
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  color: var(--gold);
+  flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--text-mid);
+  flex-shrink: 0;
+}
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: linear-gradient(90deg, var(--rule), transparent);
+}
+
+/* ── NOTES GRID ── */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 2px;
+  margin-bottom: 72px;
+}
+
+/* ── NOTE CARD ── */
+.note-card {
+  display: block;
+  text-decoration: none;
+  background: var(--bg2);
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  padding: 32px 30px;
+  position: relative;
+  overflow: hidden;
+  transition: background 0.25s, border-color 0.25s, transform 0.25s;
+  opacity: 0;
+  transform: translateY(20px);
+}
+.note-card.visible {
+  opacity: 1;
+  transform: translateY(0);
+  transition: opacity 0.6s ease, transform 0.6s ease, background 0.25s, border-color 0.25s;
+}
+.note-card:hover {
+  background: var(--bg3);
+  border-color: rgba(255,255,255,0.12);
+  transform: translateY(-3px);
+}
+.note-card:hover .card-arrow { transform: translateX(4px); opacity: 1; }
+.note-card:hover .card-glow { opacity: 1; }
+
+.card-glow {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  border-radius: 12px 12px 0 0;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 4px 10px;
+  border-radius: 20px;
+  border: 1px solid;
+}
+
+.card-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.1em;
+}
+
+.card-title {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  line-height: 1.4;
+  margin-bottom: 10px;
+}
+
+.card-desc {
+  font-size: 16px;
+  color: var(--text-mid);
+  line-height: 1.75;
+  margin-bottom: 24px;
+}
+
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--text-dim);
+  letter-spacing: 0.08em;
+}
+
+.card-arrow {
+  font-size: 16px;
+  color: var(--text-dim);
+  transition: transform 0.25s, opacity 0.25s;
+  opacity: 0.5;
+}
+
+/* ── COLOR VARIANTS ── */
+.card-blue .card-glow { background: linear-gradient(90deg, transparent, rgba(122,173,220,0.6), transparent); }
+.card-blue .card-tag { color: #7aaddc; background: rgba(122,173,220,0.08); border-color: rgba(122,173,220,0.3); }
+
+.card-purple .card-glow { background: linear-gradient(90deg, transparent, rgba(180,159,221,0.6), transparent); }
+.card-purple .card-tag { color: #b49fdd; background: rgba(180,159,221,0.08); border-color: rgba(180,159,221,0.3); }
+
+.card-teal .card-glow { background: linear-gradient(90deg, transparent, rgba(106,191,170,0.6), transparent); }
+.card-teal .card-tag { color: #6abfaa; background: rgba(106,191,170,0.08); border-color: rgba(106,191,170,0.3); }
+
+.card-amber .card-glow { background: linear-gradient(90deg, transparent, rgba(201,168,76,0.6), transparent); }
+.card-amber .card-tag { color: #c9a84c; background: rgba(201,168,76,0.08); border-color: rgba(201,168,76,0.3); }
+
+.card-coral .card-glow { background: linear-gradient(90deg, transparent, rgba(220,138,122,0.6), transparent); }
+.card-coral .card-tag { color: #dc8a7a; background: rgba(220,138,122,0.08); border-color: rgba(220,138,122,0.3); }
+
+/* ── COMING SOON CARD ── */
+.note-card.coming-soon {
+  opacity: 0.4;
+  cursor: default;
+  pointer-events: none;
+}
+.note-card.coming-soon:hover { transform: none; }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 44px 32px;
+  text-align: center;
+}
+.footer-orn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.footer-orn::before, .footer-orn::after {
+  content: ''; width: 48px; height: 1px;
+  background: var(--gold-line);
+}
+.f-gem { width: 4px; height: 4px; background: var(--gold-dim); transform: rotate(45deg); }
+footer p {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--text-dim);
+  letter-spacing: 0.12em;
+}
+
+/* ── ANIMATIONS ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  header { padding: 80px 24px 70px; }
+  main { padding: 48px 18px 72px; }
+  .notes-grid { grid-template-columns: 1fr; }
+  .header-corner { width: 50px; height: 50px; }
+}
+
+/* ── THEME TRANSITION ── */
+*, *::before, *::after { transition: background-color 0.25s ease, border-color 0.25s ease, color 0.1s ease; }
+
+/* ── LIGHT MODE ── */
+html.light {
+  --bg: #f5f3ee;
+  --bg2: #edeae3;
+  --bg3: #e4e0d8;
+  --bg4: #d8d4ca;
+  --gold: #7a5e10;
+  --gold-dim: #8a6a18;
+  --gold-line: rgba(122,94,16,0.3);
+  --text: #18150e;
+  --text-mid: #3d3828;
+  --text-dim: #7a7060;
+  --rule: rgba(0,0,0,0.09);
+}
+html.light header { background: var(--bg2); }
+html.light .note-card { background: var(--bg2); border-color: rgba(0,0,0,0.1); }
+html.light .note-card:hover { background: var(--bg3); border-color: rgba(0,0,0,0.2); }
+html.light .header-grid {
+  background-image:
+    linear-gradient(rgba(122,94,16,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,94,16,0.07) 1px, transparent 1px);
+}
+html.light .card-blue .card-tag   { color: #0d4f82; background: rgba(13,79,130,0.1);  border-color: rgba(13,79,130,0.3); }
+html.light .card-purple .card-tag { color: #4a2880; background: rgba(74,40,128,0.1);  border-color: rgba(74,40,128,0.3); }
+html.light .card-teal .card-tag   { color: #0a5c44; background: rgba(10,92,68,0.1);   border-color: rgba(10,92,68,0.3); }
+html.light .card-amber .card-tag  { color: #6a3e08; background: rgba(106,62,8,0.1);   border-color: rgba(106,62,8,0.3); }
+html.light .card-coral .card-tag  { color: #7a1e10; background: rgba(122,30,16,0.1);  border-color: rgba(122,30,16,0.3); }
+html.light .card-blue .card-glow   { background: linear-gradient(90deg, transparent, rgba(13,79,130,0.4), transparent); }
+html.light .card-purple .card-glow { background: linear-gradient(90deg, transparent, rgba(74,40,128,0.4), transparent); }
+html.light .card-teal .card-glow   { background: linear-gradient(90deg, transparent, rgba(10,92,68,0.4), transparent); }
+
+/* ── THEME TOGGLE BUTTON ── */
+.theme-btn {
+  position: fixed;
+  top: 18px; right: 22px;
+  z-index: 9999;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-line);
+  background: var(--bg3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s, background 0.2s !important;
+}
+.theme-btn:hover { transform: scale(1.12); background: var(--bg4); }
+
+</style>
+</head>
+<body>
+
+<button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="切換深色／淺色">🌙</button>
+
+<header>
+  <div class="header-grid"></div>
+  <div class="header-corner tl"></div>
+  <div class="header-corner tr"></div>
+  <div class="header-corner bl"></div>
+  <div class="header-corner br"></div>
+
+  <div class="header-inner">
+    <div class="eyebrow">政治大學 · 企業法律 · 114-2</div>
+    <h1>法律<em>筆記</em></h1>
+    <div class="header-sub">Law Notes Collection</div>
+    <div class="header-orn">
+      <div class="orn-gem"></div>
+      <div class="orn-gem"></div>
+      <div class="orn-gem"></div>
+    </div>
+  </div>
+</header>
+
+<main>
+
+  <div class="section-label">
+    <span class="section-num">All Notes</span>
+    <span class="section-title">全部筆記</span>
+    <div class="section-line"></div>
+  </div>
+
+  <div class="notes-grid">
+
+    <!-- ① 短線交易與內線交易 -->
+    <a href="insider_trading.html" class="note-card card-purple">
+      <div class="card-glow"></div>
+      <div class="card-top">
+        <span class="card-tag">證券交易法</span>
+        <span class="card-num">01</span>
+      </div>
+      <div class="card-title">短線交易與<br>內線交易</div>
+      <div class="card-desc">§157 歸入權規範、§157-1 內線交易成立要件、重大消息認定、法律責任。</div>
+      <div class="card-footer">
+        <span class="card-meta">114-2 · 周振鋒</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- ② 預留位置 -->
+    <a href="#" class="note-card card-blue coming-soon">
+      <div class="card-glow"></div>
+      <div class="card-top">
+        <span class="card-tag">即將更新</span>
+        <span class="card-num">02</span>
+      </div>
+      <div class="card-title">下一章筆記</div>
+      <div class="card-desc">新增筆記後，將 href="#" 改成對應的 HTML 檔名，並移除 coming-soon class。</div>
+      <div class="card-footer">
+        <span class="card-meta">Coming Soon</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+    <!-- ③ 預留位置 -->
+    <a href="#" class="note-card card-teal coming-soon">
+      <div class="card-glow"></div>
+      <div class="card-top">
+        <span class="card-tag">即將更新</span>
+        <span class="card-num">03</span>
+      </div>
+      <div class="card-title">下一章筆記</div>
+      <div class="card-desc">新增筆記後，將 href="#" 改成對應的 HTML 檔名，並移除 coming-soon class。</div>
+      <div class="card-footer">
+        <span class="card-meta">Coming Soon</span>
+        <span class="card-arrow">→</span>
+      </div>
+    </a>
+
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-orn">
+    <div class="f-gem"></div><div class="f-gem"></div><div class="f-gem"></div>
+  </div>
+</footer>
+
+<script>
+const io = new IntersectionObserver((entries) => {
+  entries.forEach((e, i) => {
+    if (e.isIntersecting) {
+      setTimeout(() => e.target.classList.add('visible'), i * 100);
+      io.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.note-card').forEach(el => io.observe(el));
+</script>
+
+
+<script>
+(function() {
+  const saved = localStorage.getItem('nccu-theme');
+  if (saved === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+})();
+
+function toggleTheme() {
+  const btn = document.getElementById('theme-btn');
+  const isLight = document.documentElement.classList.toggle('light');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('nccu-theme', isLight ? 'light' : 'dark');
+}
+</script>
+
+</body>
+</html>
