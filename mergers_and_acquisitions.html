@@ -1,0 +1,1443 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企業併購</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Noto+Serif+TC:wght@300;400;600&family=Noto+Sans+TC:wght@300;400;500&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg: #0f0e0c;
+  --bg2: #161410;
+  --bg3: #1d1b17;
+  --bg4: #242220;
+  --gold: #c9a84c;
+  --gold-dim: #9a7c32;
+  --gold-pale: rgba(201,168,76,0.12);
+  --gold-line: rgba(201,168,76,0.25);
+  --text: #f2ede4;
+  --text-mid: #c8bfae;
+  --text-dim: #8a8070;
+  --blue: #7aaddc;
+  --blue-bg: rgba(122,173,220,0.08);
+  --blue-line: rgba(122,173,220,0.3);
+  --purple: #b49fdd;
+  --purple-bg: rgba(180,159,221,0.08);
+  --purple-line: rgba(180,159,221,0.3);
+  --teal: #6abfaa;
+  --teal-bg: rgba(106,191,170,0.08);
+  --amber: #d4a847;
+  --amber-bg: rgba(212,168,71,0.08);
+  --amber-line: rgba(212,168,71,0.3);
+  --red: #dc8a7a;
+  --red-bg: rgba(220,138,122,0.08);
+  --red-line: rgba(220,138,122,0.3);
+  --rule: rgba(255,255,255,0.06);
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Noto Sans TC', sans-serif;
+  font-size: 19px;
+  line-height: 1.85;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── THEME TRANSITION ── */
+*, *::before, *::after { transition: background-color 0.25s ease, border-color 0.25s ease, color 0.1s ease; }
+
+/* ── LIGHT MODE ── */
+html.light {
+  --bg: #f5f3ee;
+  --bg2: #edeae3;
+  --bg3: #e4e0d8;
+  --bg4: #d8d4ca;
+  --gold: #7a5e10;
+  --gold-dim: #8a6a18;
+  --gold-line: rgba(122,94,16,0.3);
+  --text: #18150e;
+  --text-mid: #3d3828;
+  --text-dim: #7a7060;
+  --blue: #0d4f82;
+  --blue-bg: rgba(13,79,130,0.09);
+  --blue-line: rgba(13,79,130,0.3);
+  --purple: #4a2880;
+  --purple-bg: rgba(74,40,128,0.09);
+  --purple-line: rgba(74,40,128,0.3);
+  --teal: #0a5c44;
+  --teal-bg: rgba(10,92,68,0.09);
+  --amber: #8a6010;
+  --amber-bg: rgba(138,96,16,0.09);
+  --amber-line: rgba(138,96,16,0.3);
+  --red: #7a1e10;
+  --red-bg: rgba(122,30,16,0.09);
+  --red-line: rgba(122,30,16,0.3);
+  --rule: rgba(0,0,0,0.09);
+}
+html.light .compare-panel { background: var(--bg2); }
+html.light .compare-panel:hover { background: var(--bg3); }
+html.light .compare-panel.left { border-right-color: rgba(0,0,0,0.1); }
+html.light .compare-hero { border-color: rgba(0,0,0,0.12); }
+html.light .term-block { border-color: rgba(0,0,0,0.1); }
+html.light .term-block:hover { border-color: rgba(0,0,0,0.22); }
+html.light .term-header { background: var(--bg3); }
+html.light .term-header:hover { background: var(--bg4); }
+html.light .term-body { background: var(--bg2); }
+html.light .case-box { background: rgba(0,0,0,0.03); border-color: rgba(0,0,0,0.1); }
+html.light .insight { background: rgba(122,94,16,0.06); border-left-color: var(--gold-dim); }
+html.light .flow-pill { background: var(--bg4); border-color: rgba(0,0,0,0.14); }
+html.light .data-table-wrap { border-color: rgba(0,0,0,0.12); }
+html.light .data-table thead th { background: var(--bg4); border-bottom-color: rgba(0,0,0,0.12); }
+html.light .data-table tbody td { background: var(--bg2); border-bottom-color: rgba(0,0,0,0.08); }
+html.light .data-table tbody td:first-child { background: var(--bg3); }
+html.light .data-table tbody tr:hover td { background: var(--bg3); }
+html.light .data-table tbody tr:hover td:first-child { background: var(--bg4); }
+html.light .data-table tbody tr.row-total td { background: var(--bg3); }
+html.light .header-bg-grid {
+  background-image:
+    linear-gradient(rgba(122,94,16,0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(122,94,16,0.07) 1px, transparent 1px);
+}
+
+/* ── THEME TOGGLE ── */
+.theme-btn {
+  position: fixed;
+  top: 18px; right: 22px;
+  z-index: 9999;
+  width: 42px; height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--gold-line);
+  background: var(--bg3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+  transition: transform 0.2s, background 0.2s !important;
+}
+.theme-btn:hover { transform: scale(1.12); background: var(--bg4); }
+
+/* ── HEADER ── */
+header {
+  position: relative;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  background: var(--bg2);
+}
+
+.header-bg-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+  background-size: 60px 60px;
+  mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+}
+
+.header-glow {
+  position: absolute;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.header-corner {
+  position: absolute;
+  width: 100px; height: 100px;
+  border-color: var(--gold-line);
+  border-style: solid;
+  opacity: 0.6;
+}
+.header-corner.tl { top: 40px; left: 40px; border-width: 1px 0 0 1px; }
+.header-corner.tr { top: 40px; right: 40px; border-width: 1px 1px 0 0; }
+.header-corner.bl { bottom: 40px; left: 40px; border-width: 0 0 1px 1px; }
+.header-corner.br { bottom: 40px; right: 40px; border-width: 0 1px 1px 0; }
+
+.header-inner {
+  position: relative; z-index: 2;
+  text-align: center;
+  padding: 60px 40px;
+  max-width: 760px;
+}
+
+.header-eyebrow {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px; font-weight: 300;
+  letter-spacing: 0.22em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.2s;
+}
+
+header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(44px, 7vw, 76px);
+  font-weight: 700;
+  line-height: 1.12;
+  color: var(--text);
+  margin-bottom: 8px;
+  opacity: 0;
+  animation: fadeUp 0.9s ease forwards 0.35s;
+}
+
+header h1 em { font-style: italic; color: var(--gold); }
+
+.header-sub {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(16px, 2.5vw, 22px);
+  font-weight: 400; font-style: italic;
+  color: var(--text-mid);
+  margin-top: 10px; margin-bottom: 36px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.5s;
+}
+
+.header-ornament {
+  display: flex; align-items: center;
+  justify-content: center; gap: 12px;
+  margin-bottom: 32px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.6s;
+}
+.header-ornament::before, .header-ornament::after {
+  content: ''; width: 70px; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold-line));
+}
+.header-ornament::after { background: linear-gradient(90deg, var(--gold-line), transparent); }
+.orn-diamond { width: 6px; height: 6px; background: var(--gold); transform: rotate(45deg); }
+
+.header-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; font-weight: 300;
+  color: var(--text-dim); letter-spacing: 0.12em;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 0.7s;
+}
+
+.scroll-hint {
+  position: absolute; bottom: 36px; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column;
+  align-items: center; gap: 8px;
+  opacity: 0;
+  animation: fadeUp 0.8s ease forwards 1.1s;
+}
+.scroll-hint span {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--text-dim);
+}
+.scroll-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, var(--gold-dim), transparent);
+  animation: scrollPulse 2.2s ease-in-out infinite;
+}
+
+/* ── MAIN ── */
+main { max-width: 920px; margin: 0 auto; padding: 80px 32px 120px; }
+
+/* ── COMPARE HERO (for 規模 vs 範疇) ── */
+.compare-hero {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 0; margin-bottom: 80px;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px; overflow: hidden;
+}
+.compare-panel {
+  padding: 36px 32px;
+  background: var(--bg2);
+  transition: background 0.3s;
+}
+.compare-panel:hover { background: var(--bg3); }
+.compare-panel.left { border-right: 1px solid rgba(255,255,255,0.06); }
+.cp-badge {
+  display: inline-flex; align-items: center;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em;
+  text-transform: uppercase;
+  padding: 5px 12px; border-radius: 20px; margin-bottom: 16px;
+}
+.cp-badge.teal { background: var(--teal-bg); color: var(--teal); border: 1px solid rgba(106,191,170,0.3); }
+.cp-badge.amber { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-line); }
+.cp-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 24px; font-weight: 700;
+  color: var(--text); margin-bottom: 12px;
+}
+.cp-desc { font-size: 17px; color: var(--text-mid); line-height: 1.85; }
+.cp-desc strong { color: var(--text); font-weight: 500; }
+
+/* ── SECTION ── */
+.section { margin-bottom: 80px; }
+
+.section-label {
+  display: flex; align-items: center;
+  gap: 18px; margin-bottom: 36px;
+}
+.section-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; color: var(--gold);
+  letter-spacing: 0.18em; flex-shrink: 0;
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 30px; font-weight: 700;
+  color: var(--text); flex-shrink: 0;
+}
+.section-line {
+  flex: 1; height: 1px;
+  background: linear-gradient(90deg, var(--gold-line), transparent);
+}
+
+/* ── TERM BLOCK (accordion) ── */
+.term-block {
+  margin-bottom: 2px;
+  border: 1px solid var(--rule);
+  border-radius: 10px; overflow: hidden;
+  transition: border-color 0.25s;
+}
+.term-block:hover { border-color: rgba(255,255,255,0.1); }
+
+.term-header {
+  display: flex; align-items: center;
+  gap: 16px; padding: 20px 26px;
+  background: var(--bg3);
+  cursor: pointer; transition: background 0.2s;
+  user-select: none;
+}
+.term-header:hover { background: var(--bg4); }
+
+.term-accent { width: 2px; height: 26px; border-radius: 2px; flex-shrink: 0; }
+.accent-blue { background: var(--blue); }
+.accent-purple { background: var(--purple); }
+.accent-teal { background: var(--teal); }
+.accent-red { background: var(--red); }
+.accent-amber { background: var(--amber); }
+.accent-gold { background: var(--gold); }
+
+.term-name {
+  font-family: 'Noto Serif TC', serif;
+  font-size: 20px; font-weight: 600;
+  color: var(--text); flex: 1;
+}
+
+.term-chevron {
+  color: var(--text-dim); font-size: 12px;
+  transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+  flex-shrink: 0;
+}
+.term-block.open .term-chevron { transform: rotate(180deg); }
+
+.term-body {
+  padding: 0 26px; max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.5s cubic-bezier(0.4,0,0.2,1), padding 0.3s ease;
+  background: var(--bg2);
+  font-size: 18px; color: var(--text-mid); line-height: 1.9;
+}
+.term-block.open .term-body { max-height: 2400px; padding: 24px 26px 28px; }
+.term-body strong { color: var(--text); font-weight: 500; }
+
+/* ── INSIGHT ── */
+.insight {
+  margin-top: 18px; padding: 20px 22px;
+  background: rgba(201,168,76,0.04);
+  border-left: 2px solid var(--gold-dim);
+  border-radius: 0 8px 8px 0;
+}
+.insight-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.16em;
+  color: var(--gold); text-transform: uppercase;
+  margin-bottom: 10px;
+}
+.insight p { font-size: 17px; color: var(--text-mid); line-height: 1.88; }
+.insight p + p { margin-top: 10px; }
+.insight strong { color: var(--text); font-weight: 500; }
+
+/* ── CASE BOX ── */
+.case-box {
+  margin-top: 18px; padding: 18px 20px;
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 8px;
+}
+.case-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.14em;
+  color: var(--gold-dim); text-transform: uppercase;
+  margin-bottom: 9px;
+}
+.case-box p { font-size: 17px; color: var(--text-mid); line-height: 1.8; }
+.case-box strong { color: var(--text); font-weight: 500; }
+
+/* ── FLOW PILLS ── */
+.flow-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin: 16px 0 4px; }
+.flow-pill {
+  padding: 7px 16px;
+  background: var(--bg4);
+  border: 1px solid rgba(255,255,255,0.09);
+  border-radius: 4px;
+  font-size: 16px; color: var(--text); font-weight: 300;
+}
+.flow-plus { color: var(--text-dim); font-size: 18px; }
+
+/* ── TYPE GRID (merger types) ── */
+.type-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 16px; }
+.type-box {
+  padding: 16px 18px; border-radius: 8px;
+  border: 1px solid;
+}
+.type-box.blue { background: var(--blue-bg); border-color: var(--blue-line); }
+.type-box.teal { background: var(--teal-bg); border-color: rgba(106,191,170,0.2); }
+.type-box.purple { background: var(--purple-bg); border-color: var(--purple-line); }
+.type-box.amber { background: var(--amber-bg); border-color: var(--amber-line); }
+.type-box.red { background: var(--red-bg); border-color: var(--red-line); }
+.type-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px; letter-spacing: 0.12em;
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.type-box.blue .type-label { color: var(--blue); }
+.type-box.teal .type-label { color: var(--teal); }
+.type-box.purple .type-label { color: var(--purple); }
+.type-box.amber .type-label { color: var(--amber); }
+.type-box.red .type-label { color: var(--red); }
+.type-box p { font-size: 16px; color: var(--text-mid); line-height: 1.75; }
+.type-box strong { color: var(--text); font-weight: 500; }
+
+/* ── DATA TABLE ── */
+.data-table-wrap { border: 1px solid var(--rule); border-radius: 12px; overflow: hidden; margin-top: 12px; overflow-x: auto; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 16px; }
+.data-table thead th {
+  background: var(--bg4); padding: 13px 18px; text-align: left;
+  font-family: 'DM Mono', monospace; font-size: 10px;
+  letter-spacing: 0.12em; color: var(--text-mid);
+  font-weight: 400; text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+}
+.data-table tbody td {
+  padding: 14px 18px; border-bottom: 1px solid var(--rule);
+  color: var(--text-mid); vertical-align: top;
+  line-height: 1.65; background: var(--bg2);
+  transition: background 0.2s;
+}
+.data-table tbody tr:last-child td { border-bottom: none; }
+.data-table tbody td:first-child {
+  font-family: 'Noto Serif TC', serif; font-weight: 600;
+  color: var(--text); background: var(--bg3); white-space: nowrap;
+}
+.data-table tbody tr:hover td { background: var(--bg3); }
+.data-table tbody tr:hover td:first-child { background: var(--bg4); }
+.data-table tbody tr.row-total td {
+  background: var(--bg3); font-weight: 500; color: var(--text);
+  border-top: 1px solid rgba(201,168,76,0.2);
+}
+.data-table tbody tr.row-total td:first-child { background: var(--bg4); color: var(--gold); }
+
+/* ── PROCEDURE LIST ── */
+.procedure-list { margin-top: 4px; }
+.procedure-item {
+  display: flex; gap: 16px; align-items: flex-start;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--rule);
+}
+.procedure-item:last-child { border-bottom: none; }
+.procedure-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px; color: var(--gold);
+  letter-spacing: 0.1em; flex-shrink: 0;
+  padding-top: 2px; min-width: 28px;
+}
+.procedure-text { font-size: 18px; color: var(--text-mid); line-height: 1.75; }
+.procedure-text strong { color: var(--text); font-weight: 500; }
+
+/* ── TYPE TABLE (企併型態一覽表) ── */
+.type-table-wrap {
+  border: 1px solid var(--rule);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 12px;
+}
+.type-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 16px;
+}
+.type-table thead th {
+  background: var(--bg4);
+  padding: 13px 18px;
+  text-align: left;
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.14em;
+  color: var(--text-mid);
+  font-weight: 400;
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--rule);
+}
+/* group header rows */
+.type-table tr.group-header td.group-label {
+  padding: 10px 18px;
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+/* sub rows */
+.type-table tr .sub-indent {
+  padding: 12px 18px 12px 32px;
+  color: var(--text-mid);
+  border-bottom: 1px solid var(--rule);
+  line-height: 1.6;
+}
+.type-table tr.group-last .sub-indent,
+.type-table tr.group-last .law-col { border-bottom: 2px solid rgba(255,255,255,0.1); }
+html.light .type-table tr.group-last .sub-indent,
+html.light .type-table tr.group-last .law-col { border-bottom: 2px solid rgba(0,0,0,0.12); }
+.type-table tr:last-child .sub-indent,
+.type-table tr:last-child .law-col { border-bottom: none; }
+
+.type-table .law-col {
+  padding: 12px 18px;
+  color: var(--text-dim);
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  letter-spacing: 0.06em;
+  border-bottom: 1px solid var(--rule);
+  white-space: nowrap;
+  vertical-align: top;
+}
+
+/* blue group = 合併 */
+.type-table tr.group-blue.group-header td {
+  background: rgba(122,173,220,0.15);
+  color: var(--blue);
+  border-bottom: 1px solid rgba(122,173,220,0.25);
+}
+.type-table tr.group-blue:not(.group-header) td {
+  background: rgba(122,173,220,0.05);
+}
+.type-table tr.group-blue:not(.group-header):hover td {
+  background: rgba(122,173,220,0.11);
+}
+
+/* teal group = 收購 */
+.type-table tr.group-teal.group-header td {
+  background: rgba(106,191,170,0.15);
+  color: var(--teal);
+  border-bottom: 1px solid rgba(106,191,170,0.25);
+}
+.type-table tr.group-teal:not(.group-header) td {
+  background: rgba(106,191,170,0.05);
+}
+.type-table tr.group-teal:not(.group-header):hover td {
+  background: rgba(106,191,170,0.11);
+}
+
+/* purple group = 分割 */
+.type-table tr.group-purple.group-header td {
+  background: rgba(180,159,221,0.15);
+  color: var(--purple);
+  border-bottom: 1px solid rgba(180,159,221,0.25);
+}
+.type-table tr.group-purple:not(.group-header) td {
+  background: rgba(180,159,221,0.05);
+}
+.type-table tr.group-purple:not(.group-header):hover td {
+  background: rgba(180,159,221,0.11);
+}
+
+/* light mode overrides */
+html.light .type-table-wrap { border-color: rgba(0,0,0,0.12); }
+html.light .type-table thead th { background: var(--bg4); border-bottom-color: rgba(0,0,0,0.12); }
+html.light .type-table .sub-indent { border-bottom-color: rgba(0,0,0,0.08); }
+html.light .type-table .law-col { border-bottom-color: rgba(0,0,0,0.08); }
+html.light .type-table tr.group-blue.group-header td { background: rgba(13,79,130,0.12); color: var(--blue); border-bottom-color: rgba(13,79,130,0.25); }
+html.light .type-table tr.group-blue:not(.group-header) td { background: rgba(13,79,130,0.05); }
+html.light .type-table tr.group-blue:not(.group-header):hover td { background: rgba(13,79,130,0.1); }
+html.light .type-table tr.group-teal.group-header td { background: rgba(10,92,68,0.12); color: var(--teal); border-bottom-color: rgba(10,92,68,0.25); }
+html.light .type-table tr.group-teal:not(.group-header) td { background: rgba(10,92,68,0.05); }
+html.light .type-table tr.group-teal:not(.group-header):hover td { background: rgba(10,92,68,0.1); }
+html.light .type-table tr.group-purple.group-header td { background: rgba(74,40,128,0.12); color: var(--purple); border-bottom-color: rgba(74,40,128,0.25); }
+html.light .type-table tr.group-purple:not(.group-header) td { background: rgba(74,40,128,0.05); }
+html.light .type-table tr.group-purple:not(.group-header):hover td { background: rgba(74,40,128,0.1); }
+
+/* ── FOOTER ── */
+footer {
+  border-top: 1px solid var(--rule);
+  padding: 52px 32px; text-align: center;
+}
+.footer-orn {
+  display: flex; align-items: center;
+  justify-content: center; gap: 14px; margin-bottom: 0;
+}
+.footer-orn::before, .footer-orn::after {
+  content: ''; width: 56px; height: 1px; background: var(--gold-line);
+}
+.footer-gem { width: 5px; height: 5px; background: var(--gold-dim); transform: rotate(45deg); }
+
+/* ── SCROLL REVEAL ── */
+.reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.75s ease, transform 0.75s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes scrollPulse {
+  0%, 100% { opacity: 0.35; transform: scaleY(1); }
+  50%       { opacity: 1;    transform: scaleY(1.15); }
+}
+
+@media (max-width: 640px) {
+  .compare-hero { grid-template-columns: 1fr; }
+  .compare-panel.left { border-right: none; border-bottom: 1px solid var(--rule); }
+  .type-grid { grid-template-columns: 1fr; }
+  .header-corner { width: 56px; height: 56px; }
+  main { padding: 48px 18px 80px; }
+}
+</style>
+</head>
+<body>
+
+<button class="theme-btn" id="theme-btn" onclick="toggleTheme()" title="切換深色／淺色">🌙</button>
+
+<header>
+  <div class="header-bg-grid"></div>
+  <div class="header-glow"></div>
+  <div class="header-corner tl"></div>
+  <div class="header-corner tr"></div>
+  <div class="header-corner bl"></div>
+  <div class="header-corner br"></div>
+
+  <div class="header-inner">
+    <div class="header-eyebrow">企業法律 &nbsp;·&nbsp; 政治大學 &nbsp;·&nbsp; 114-2</div>
+    <h1>企業<em>併購</em></h1>
+    <div class="header-sub">Mergers & Acquisitions</div>
+    <div class="header-ornament">
+      <div class="orn-diamond"></div>
+      <div class="orn-diamond"></div>
+      <div class="orn-diamond"></div>
+    </div>
+    <div class="header-meta">企業併購法 &nbsp;·&nbsp; 公司法 &nbsp;·&nbsp; 證券交易法</div>
+  </div>
+
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</header>
+
+<main>
+
+  <!-- ════ Section 01 意義與目的 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 01</span>
+      <h2 class="section-title">意義與目的</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-teal"></div>
+        <div class="term-name">企業併購之意義</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        以<strong>取得或移轉經營控制權</strong>為目的之經濟行為。企業併購屬於「公司重組」（Corporate structural changes）概念之一環。
+      </div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-teal"></div>
+        <div class="term-name">企業併購之目的——規模經濟 vs 範疇經濟</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        企業併購是公司成長的策略之一，追求以下兩種經濟效益：
+        <div class="compare-hero" style="margin-top:18px;margin-bottom:0">
+          <div class="compare-panel left">
+            <div class="cp-badge teal">規模經濟</div>
+            <div class="cp-title" style="font-size:20px">Economies of Scale</div>
+            <div class="cp-desc">在一定的產量範圍內，隨著產量的增加，<strong>平均成本降低</strong>。</div>
+          </div>
+          <div class="compare-panel">
+            <div class="cp-badge amber">範疇經濟</div>
+            <div class="cp-title" style="font-size:20px">Economies of Scope</div>
+            <div class="cp-desc">當<strong>同時生產兩種產品</strong>的費用，低於分別生產每種產品的費用時所存在的狀況。</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-teal"></div>
+        <div class="term-name">企業併購法的功能與定位</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        企併法提供遊戲規則，使併購順利（有效率地）進行，並對相關人等權益維護維持在一定程度（如喪失股權但公平獲得對價）。<br><br>
+        是公司法的<strong>特別法</strong>，不少排除公司法的規定（例如企併法規定於一定條件下，可不經股東會決議程序）。<br><br>
+        但併購手段不限企併法規範，<strong>公開收購（證交法）、股份交換（公司法）、合意股權收購</strong>等也是常見手段。
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 02 實務案例 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 02</span>
+      <h2 class="section-title">實務案例</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">2021 台灣大併台灣之星（電信規模經濟）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        台灣大預計增資發行 2.82 億股，和台灣之星換股，台灣之星每股交換台灣大 <strong>0.04508 股</strong>。交易金額約 <strong>282 億元</strong>。合併後台灣大將擁有 100MHz 業界最大頻寬，有 980 萬用戶。
+        <div class="case-box">
+          <div class="case-label">後續進展</div>
+          <p>2023.01 NCC 以附加附款方式通過合併案。2023.12.01 完成合併。2024.09 台灣大履行附負擔，繳回超額頻寬 5MHz×2，NCC 確認不再處罰鍰（合計已罰 940 萬元）。</p>
+        </div>
+        <div class="insight">
+          <div class="insight-label">補充：頻率特性</div>
+          <p><strong>高頻</strong>容量大但涵蓋小、穿透性差，常用於都會區；<strong>低頻</strong>涵蓋遠、穿透性佳，常用於郊區。頻寬越寬如同馬路越大，車輛跑得更快更順。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">2022 遠傳併亞太爭議</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        遠傳以每股 <strong>6.475 元（折價 18.75%）</strong>併購亞太，引發小股東不滿，大喊「賤賣亞太、坑殺股東」。鴻海入主亞太近 8 年，集團已為電信事業燒掉 300 億元，決定壯士斷腕。<br><br>
+        合併後鴻海持有新遠傳四%股權，並擴大 5G 專網市場商機。2023.07 公平會有條件通過；<strong>2023.12.15 完成合併</strong>。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">2018 太陽能三合一（新日光、昇陽光、昱晶）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        三公司合併後成立<strong>「聯合再生能源股份有限公司」</strong>，目標 3 年後模組產能達 5GW。<br><br>
+        背景：缺乏資金、台灣太陽能難以與中國競爭，產業落入代工困境。→ 典型<strong>規模經濟</strong>驅動型併購。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">2020 家樂福買頂好 → 2022 統一入主家樂福</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        家樂福收購 Dairy Farm 集團在台灣的惠康百貨（199 間頂好 Wellcome 超市、25 間 JASONS），交易價值 9,700 萬歐元（約 32.3 億台幣）。<br><br>
+        2022.07 統一以 239 億元、統一超以 51 億元，合計 <strong>290 億元</strong>取得家福六成股權。
+        <div class="case-box">
+          <div class="case-label">補充：公平會附加負擔</div>
+          <p>2023.05 公平會不禁止統一與家樂福結合，附加負擔包含：不得對中小型供貨商差別待遇、3 年內不得與統一超商共同採購等。</p>
+        </div>
+        <div class="case-box" style="margin-top:10px">
+          <div class="case-label">對比：2024.12 Uber Eats ✕ foodpanda 遭禁止</div>
+          <p>公平會認定合併後市占率高達 90% 以上，限制競爭不利益遠大於整體經濟利益，依《公平交易法》<strong>裁定禁止結合</strong>。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-amber"></div>
+        <div class="term-name">金融業併購案例群</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="case-box">
+          <div class="case-label">2009 凱基證併台證證</div>
+          <p>以 290 億元現金及股票購併台證證券，通路由 35 家增至 88 家，市占率從 3.73% 提升至 8.34%，排名第二。資金來源：發行 GDR 募 93.6 億、銀行融資 70 億、帳上現金、賣回台證大樓。</p>
+        </div>
+        <div class="case-box" style="margin-top:10px">
+          <div class="case-label">2020 首宗金金併：富邦金併日盛金</div>
+          <p>富邦金以每股 13 元公開收購日盛金超過 50% 股權，最終取得 100% 股權。<strong>2022.11 正式合併完成</strong>，日盛金終止上櫃，國內上市櫃金控由 15 家減為 14 家。</p>
+        </div>
+        <div class="case-box" style="margin-top:10px">
+          <div class="case-label">2021 國票金併安泰銀</div>
+          <p>以現金搭換股合併，每股對價 17.212231 元，總併購規模 337 億元。合併後國票金成為唯一同時擁有虛實兩家子銀行的金控，總資產幾近倍增至 6,666 億元以上。2022.10 因大股東意見分歧提起訴訟，致程序延宕。</p>
+        </div>
+        <div class="case-box" style="margin-top:10px">
+          <div class="case-label">2024–2025 台新金併新光金（第二宗金金併）</div>
+          <p>台新金為存續公司，新光金為消滅公司，更名「台新新光金融控股股份有限公司」。換股比例：每 0.6720 股台新金普通股加 0.175 股辛種特別股換 1 股新光金，總價 2,512 億元。2025.03.31 獲金管會核准，合併基準日定於 <strong>2025.07.24</strong>。合併後成為台灣第四大金控。</p>
+        </div>
+        <div class="case-box" style="margin-top:10px">
+          <div class="case-label">2026 玉山金收購三商美邦人壽</div>
+          <p>每 0.2486 股換 1 股三商壽，交易總值約 483 億元。合併後玉山金總資產將衝上 6 兆元，躋身台灣<strong>前五大金控</strong>。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 03 併購型態 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 03</span>
+      <h2 class="section-title">企業併購之型態</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">三大型態定義（企併法 §4）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box blue">
+            <div class="type-label">合併 §4③</div>
+            <p>二個或以上公司合併為一公司。→ <strong>公司法人格消滅</strong>。</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">收購 §4④</div>
+            <p>取得他公司股份、營業或資產。→ <strong>法人格不消滅</strong>，僅取得股份、營業或資產。</p>
+          </div>
+        </div>
+        <div class="type-grid" style="margin-top:10px">
+          <div class="type-box purple" style="grid-column:1/-1">
+            <div class="type-label">分割 §4⑥</div>
+            <p>公司將獨立營業部門或財產分割為新公司，或分割予既存公司。→ 可能有<strong>新公司法人格產生</strong>。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">企併型態一覽表</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-table-wrap">
+          <table class="type-table">
+            <tbody>
+              <!-- 合併 -->
+              <tr class="group-header group-blue">
+                <td class="group-label" colspan="2">合併</td>
+              </tr>
+              <tr class="group-blue">
+                <td class="sub-indent">一般合併</td>
+                <td class="law-col">§18-1</td>
+              </tr>
+              <tr class="group-blue">
+                <td class="sub-indent">非對稱合併</td>
+                <td class="law-col">§18-7</td>
+              </tr>
+              <tr class="group-blue group-last">
+                <td class="sub-indent">簡易合併</td>
+                <td class="law-col">§19</td>
+              </tr>
+              <!-- 收購 -->
+              <tr class="group-header group-teal">
+                <td class="group-label" colspan="2">收購</td>
+              </tr>
+              <tr class="group-teal">
+                <td class="sub-indent">概括承受、讓與</td>
+                <td class="law-col">§27-1 前段</td>
+              </tr>
+              <tr class="group-teal">
+                <td class="sub-indent">營業讓與、受讓</td>
+                <td class="law-col">§27-1 後段、公司法§185</td>
+              </tr>
+              <tr class="group-teal">
+                <td class="sub-indent">脫殼法營業讓與</td>
+                <td class="law-col">§28</td>
+              </tr>
+              <tr class="group-teal">
+                <td class="sub-indent">一般股份轉換</td>
+                <td class="law-col">§29-1</td>
+              </tr>
+              <tr class="group-teal">
+                <td class="sub-indent">非對稱股份轉換</td>
+                <td class="law-col">§29-6</td>
+              </tr>
+              <tr class="group-teal group-last">
+                <td class="sub-indent">簡易股份轉換</td>
+                <td class="law-col">§30</td>
+              </tr>
+              <!-- 分割 -->
+              <tr class="group-header group-purple">
+                <td class="group-label" colspan="2">分割</td>
+              </tr>
+              <tr class="group-purple">
+                <td class="sub-indent">一般分割</td>
+                <td class="law-col">§35</td>
+              </tr>
+              <tr class="group-purple">
+                <td class="sub-indent">非對稱分割（被分割公司與分割部分懸殊）</td>
+                <td class="law-col">§36-1</td>
+              </tr>
+              <tr class="group-purple">
+                <td class="sub-indent">非對稱分割（分割部分與受讓公司懸殊）</td>
+                <td class="law-col">§36-2</td>
+              </tr>
+              <tr class="group-purple">
+                <td class="sub-indent">簡易分割</td>
+                <td class="law-col">§37</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="insight" style="margin-top:16px">
+          <div class="insight-label">2024 Q1–Q3 統計</div>
+          <p>合計 155 件：合併 120 件、股份轉換 10 件、分割 25 件。<strong>收購件數為 0</strong>（依企併法定義之收購，不含市場買股等）。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 04 併購程序 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 04</span>
+      <h2 class="section-title">併購執行程序</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-gold"></div>
+        <div class="term-name">公司執行併購之完整程序（由下而上）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="procedure-list">
+          <div class="procedure-item"><span class="procedure-num">01</span><span class="procedure-text">公開公司之<strong>董事會決議前審議、評估程序</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">02</span><span class="procedure-text"><strong>董事會提出並決議</strong>併購契約</span></div>
+          <div class="procedure-item"><span class="procedure-num">03</span><span class="procedure-text">符合申報門檻者，向<strong>公平會申報</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">04</span><span class="procedure-text">併購契約經<strong>股東會特別決議</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">05</span><span class="procedure-text">異議股東行使<strong>股份收買請求權</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">06</span><span class="procedure-text">踐行<strong>保護債權人程序</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">07</span><span class="procedure-text"><strong>勞工保護程序</strong></span></div>
+          <div class="procedure-item"><span class="procedure-num">08</span><span class="procedure-text">併購之<strong>登記及公告申報程序</strong></span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-gold"></div>
+        <div class="term-name">董事會決議前審議評估（公開發行公司）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        公開發行公司因所涉範圍、金額及影響股東人數較多，特別規定董事會決議前需經過較高密度之評估程序。
+        <div class="type-grid" style="margin-top:16px">
+          <div class="type-box blue">
+            <div class="type-label">獨立委員會審議程序（企併法 §6）</div>
+            <p>召開董事會前，應設置<strong>特別委員會</strong>（或由審計委員會行之），就併購計畫之公平性、合理性進行審議，並委請<strong>獨立專家</strong>就換股比例或對價合理性提供意見。</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">專家合理性意見評估（資產處理準則 §22）</div>
+            <p>委請<strong>會計師、律師或證券承銷商</strong>評估換股比例、收購價格合理性，將評估結果提報董事會。<br><br>例外：母公司合併 100% 持有子公司、100% 子公司間合併，無須評估。</p>
+          </div>
+        </div>
+        <div class="data-table-wrap" style="margin-top:16px">
+          <table class="data-table">
+            <thead><tr><th></th><th>審議程序</th><th>評估程序</th></tr></thead>
+            <tbody>
+              <tr><td>法源</td><td>企併法第6條（法律）</td><td>資產處理準則第22條（行政命令）</td></tr>
+              <tr><td>內容</td><td>整體併購之合理性及公平性；換股比例之合理性</td><td>換股比例、收購價格之合理性</td></tr>
+              <tr><td>效果</td><td>提報<strong>董事會及股東會</strong></td><td>提報董事會、交付股東</td></tr>
+              <tr><td>例外</td><td>母公司與100%子公司之合併、分割</td><td>母公司與100%子公司之合併；100%子公司間之合併</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-gold"></div>
+        <div class="term-name">股東會特別決議規則</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box blue">
+            <div class="type-label">一般原則</div>
+            <p><strong>三分之二</strong>出席、出席<strong>二分之一</strong>同意</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">公開發行公司便宜方式（18條2項）</div>
+            <p><strong>二分之一</strong>出席、出席<strong>三分之二</strong>同意</p>
+          </div>
+        </div>
+        <div class="type-grid" style="margin-top:10px">
+          <div class="type-box red" style="grid-column:1/-1">
+            <div class="type-label">因併購致下市（絕對股東會特別決議，18條3項）</div>
+            <p>須<strong>三分之二</strong>同意，不以出席股份數為計算基數（最嚴格）。</p>
+          </div>
+        </div>
+
+        <div class="data-table-wrap" style="margin-top:16px">
+          <table class="data-table">
+            <thead><tr><th>併購行為</th><th>董事會決議</th><th>股東會決議</th><th>事後報告股東</th></tr></thead>
+            <tbody>
+              <tr><td>一般合併</td><td>普通決議</td><td>特別決議</td><td>—</td></tr>
+              <tr><td>非對稱合併</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>簡易合併</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>一般分割</td><td>普通決議</td><td>特別決議</td><td>—</td></tr>
+              <tr><td>非對稱分割</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>簡易分割</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>一般股份轉換</td><td>特別決議</td><td>特別決議</td><td>—</td></tr>
+              <tr><td>非對稱股份轉換</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>簡易股份轉換</td><td>特別決議</td><td>免除</td><td>✓</td></tr>
+              <tr><td>概括讓與／承受</td><td>特別決議</td><td>特別決議</td><td>—</td></tr>
+              <tr><td>營業讓與／受讓</td><td>特別決議</td><td>特別決議</td><td>—</td></tr>
+              <tr><td>脫殼法營業讓與</td><td>特別決議</td><td>免除</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 05 合併 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 05</span>
+      <h2 class="section-title">合併</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">合併之意義與經濟誘因</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        二個或二個以上之公司，訂定合併契約後，<strong>免經清算程序</strong>，歸併為一公司之行為。存續或新設公司概括承受消滅公司之全部權利義務。<br><br>
+        <strong>經濟誘因：</strong>達成規模經濟、配合多角化經營分散風險、租稅優惠（營業淨利抵銷虧損）、提升企業形象或避免倒閉。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">合併類型——以存續公司區分</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box blue">
+            <div class="type-label">新設合併（創設合併）</div>
+            <p>參與公司<strong>全部消滅</strong>，由新成立公司概括承受。<br>A + B + C → 新D</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">吸收合併（存續合併）</div>
+            <p>部分消滅，由<strong>存續公司</strong>概括承受。<br>A + B → A</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">合併類型——以合併對價區分</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box purple">
+            <div class="type-label">股份交換合併</div>
+            <p>以<strong>股份</strong>作為支付予目標公司股東之對價。</p>
+          </div>
+          <div class="type-box red">
+            <div class="type-label">現金逐出合併</div>
+            <p>以<strong>現金</strong>作為支付予目標公司股東之對價。常用於「二階段合併」——先公開收購取得過半股份，再以現金對價合併驅逐小股東。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">特殊合併類型——三角合併</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        併購公司（母公司）透過其百分百控制之子公司，與目標公司合併：
+        <div class="type-grid" style="margin-top:14px">
+          <div class="type-box teal">
+            <div class="type-label">正三角合併</div>
+            <p>存續公司為<strong>子公司</strong>，目標公司消滅</p>
+          </div>
+          <div class="type-box purple">
+            <div class="type-label">反三角合併</div>
+            <p>存續公司為<strong>目標公司</strong>，子公司消滅</p>
+          </div>
+        </div>
+        <div class="insight" style="margin-top:14px">
+          <div class="insight-label">三角合併優點</div>
+          <p>收購公司可借子公司收購以停損，避免自身為併購主體。對價為子公司持有母公司股份；母公司因而發行之股份得<strong>排除股東與員工新股認購權</strong>（公267）；合併後母公司取得目標公司控制權。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">簡易合併（§19）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <strong>母子合併：</strong>母公司持有子公司 <strong>90% 以上股份</strong>時，得免除雙方股東會特別決議，僅須雙方董事會特別決議。<br><br>
+        <strong>兄弟公司間合併（19條1項後段）：</strong>母公司分別持有二子公司 90% 以上股份時，二子公司間合併得不經股東會特別決議，僅須雙方董事會特別決議。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-blue"></div>
+        <div class="term-name">非對稱合併（§18-7）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        極大之公司併購極小之公司，對存續大公司影響很小，故<strong>存續方僅需董事會特別決議</strong>。<br><br>
+        <strong>要件（符合任一即可）：</strong><br>
+        存續公司為合併發行之新股，未超過存續公司已發行有表決權股份總數之 <strong>20%</strong>；或<br>
+        交付消滅公司股東之股份、現金或其他財產價值總額未超過存續公司淨值之 <strong>20%</strong>。<br><br>
+        <strong>例外（仍需股東會特別決議）：</strong>消滅公司資產不足抵償負債之虞；存續公司有變更章程之必要。
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 06 現金逐出合併 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 06</span>
+      <h2 class="section-title">現金逐出合併</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-red"></div>
+        <div class="term-name">Cash Out Merger——優缺點</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        合併時收購公司以現金為全部對價予目標公司股東，合併完成後目標公司股東取得現金但喪失股東權利，如同被逐出公司。
+        <div class="type-grid" style="margin-top:16px">
+          <div class="type-box teal">
+            <div class="type-label">優點</div>
+            <p>① 公司股權單純化<br>② 私有化（Going Private）效果，不受證交法規拘束<br>③ 不受制於投資人對短期獲利之期待，得以致力追求長期目標</p>
+          </div>
+          <div class="type-box red">
+            <div class="type-label">缺點</div>
+            <p>① 大股東得利用股份價值未彰顯前低價收購少數股東股份<br>② 少數股東處於股權弱勢且資訊不足，通常無抵抗能力</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-red"></div>
+        <div class="term-name">實例：東森媒體科技案（凱雷）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        凱雷成立盛澤公司，以每股 <strong>32.5 元</strong>收購 90.37% 東森媒體股權，隨即以每股 <strong>26 元</strong>利用簡易合併程序逐出其餘不到 10% 的小股東（價差 6.5 元）。<br><br>
+        此案反映出「先購後併」的型態中，買方透過陸續買進持股的手法，進而滲透賣方公司並主導議案。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-red"></div>
+        <div class="term-name">實例：雷亞案（臺高院 108 年度上更一字第 49 號）</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        合併對價未具體說明認定現金對價所憑依據及計算方法，致被逐出股東無從驗證價格合理性。<br><br>
+        <strong>法院撤銷合併決議</strong>；最高法院裁定上訴不合法，駁回（110 年度台上字第 3180 號）。
+        <div class="insight" style="margin-top:14px">
+          <div class="insight-label">實務啟示</div>
+          <p>現金逐出合併的對價必須有<strong>具體依據與計算方法</strong>，否則被逐出股東得主張撤銷合併決議。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 07 收購 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 07</span>
+      <h2 class="section-title">收購</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-teal"></div>
+        <div class="term-name">收購之類型</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box blue">
+            <div class="type-label">股份收購（Share Acquisition）</div>
+            <p>① 購入股份（市場內直接購入）<br>② 公開收購（市場外大量取得）→ 證交法規範<br>③ 參與私募或現金增資新股<br>④ <strong>股份轉換</strong> → 企併法規範</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">資產收購（Asset Acquisition）</div>
+            <p>① 營業讓與、受讓<br>② 概括承受、讓與<br><br>主要由<strong>企併法</strong>規範</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-teal"></div>
+        <div class="term-name">股份轉換——類型與程序</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        A公司（受讓公司）取得B公司（目標公司）<strong>100%</strong>股份，B公司股東讓與100%股份予A並取得A支付之對價。轉換後B成為A之<strong>100%子公司</strong>。<br><br>
+        <strong>非對稱股份轉換（§29-6）：</strong>因資產規模懸殊，收購公司僅需董特決，免除股特決。<br>
+        要件（符合任一）：收購公司因轉換發行之新股不到已發行之 <strong>20%</strong>；或目標公司之資產不到收購公司淨值之 <strong>20%</strong>。<br><br>
+        <strong>簡易股份轉換（§30）：</strong>母公司已持有子公司 90% 以上股份，雙方僅需董特決。
+        <div class="data-table-wrap" style="margin-top:16px">
+          <table class="data-table">
+            <thead><tr><th></th><th>股份轉換（企併法）</th><th>股份交換（公司法）</th></tr></thead>
+            <tbody>
+              <tr><td>法源</td><td>企併法 §29</td><td>公司法 §156-3</td></tr>
+              <tr><td>目的</td><td>取得他公司<strong>全部</strong>已發行股份，形成100%母子關係</td><td>形成企業間策略聯盟（部分持股）</td></tr>
+              <tr><td>對股東效力</td><td>具<strong>強制力</strong> → 賦予股份收買請求權</td><td>無強制力 → 無股份收買請求權</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 08 分割 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 08</span>
+      <h2 class="section-title">分割</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">分割之意義與名詞</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        一公司（被分割公司）將經濟上成為一個整體之營業部門之財產（分割部分），分割予既存公司（吸收分割）或新設公司（新設分割），由被分割公司或其股東取得既存公司或新設公司之股份或資產。<br><br>
+        <strong>目的：</strong>解決企業組織過度膨脹或業務過於龐雜，無法專業經營之問題。
+        <div class="type-grid" style="margin-top:16px">
+          <div class="type-box blue">
+            <div class="type-label">被分割公司</div>
+            <p>自己之部分<strong>被</strong>分割之公司</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">受讓公司</div>
+            <p>受讓分割部分之公司（可為既存或新設公司）</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">分割之種類</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <strong>以對價給付對象區分：</strong>
+        <div class="type-grid" style="margin-top:10px">
+          <div class="type-box blue"><div class="type-label">物的分割（母子型）</div><p>對價給付予<strong>被分割公司</strong></p></div>
+          <div class="type-box teal"><div class="type-label">人的分割（兄弟型）</div><p>對價給付予<strong>被分割公司之股東</strong></p></div>
+        </div>
+        <br>
+        <strong>以分割部分之對象區分：</strong>
+        <div class="type-grid" style="margin-top:10px">
+          <div class="type-box purple"><div class="type-label">新設分割</div><p>另設立新公司受讓（適合事業部門欲獨立為公司）</p></div>
+          <div class="type-box amber"><div class="type-label">吸收分割</div><p>由既存公司承受（適合母公司集中管理子公司重複事業）</p></div>
+        </div>
+        <br>
+        <strong>以被分割公司之存續區分：</strong>
+        <div class="type-grid" style="margin-top:10px">
+          <div class="type-box red"><div class="type-label">消滅分割</div><p>被分割公司在分割後<strong>解散消滅</strong></p></div>
+          <div class="type-box teal"><div class="type-label">存續分割</div><p>被分割公司完成分割後<strong>仍繼續存在</strong></p></div>
+        </div>
+        <div class="insight" style="margin-top:14px">
+          <div class="insight-label">注意</div>
+          <p>「<strong>存續分割</strong>」與「<strong>吸收分割</strong>」是<strong>不同的分類標準</strong>！存續分割指被分割公司仍繼續存在，非指被分割部分存續。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">特殊分割類型</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <strong>非對稱分割（企併法 §36）：</strong>二者資產差距懸殊時，無影響方僅需董特決。
+        <div class="type-grid" style="margin-top:12px">
+          <div class="type-box blue">
+            <div class="type-label">類型一：切很小塊（36條1項）</div>
+            <p>要件：分割部分不到被分割公司淨值之 <strong>20%</strong>，且由被分割公司取得全部對價，且無變更章程之必要<br>效果：被分割公司僅需董特決</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">類型二：吃很小塊（36條2項）</div>
+            <p>要件：為受讓所發行新股不到已發行之 <strong>20%</strong>，或支付財產總額不到受讓公司淨值之 20%，且無資不抵債及無變更章程<br>效果：受讓公司僅需董特決</p>
+          </div>
+        </div>
+        <br>
+        <strong>簡易分割（企併法 §37-1）：</strong>母公司持有子公司 <strong>90%</strong> 以上股份，以母公司為受讓公司，子公司為被分割公司，且子公司取得全部對價 → 雙方董特決即可，免除股特決。
+      </div>
+    </div>
+
+    <div class="term-block">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-purple"></div>
+        <div class="term-name">分割之效力</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="procedure-list">
+          <div class="procedure-item">
+            <span class="procedure-num">01</span>
+            <span class="procedure-text"><strong>被分割公司可能消滅：</strong>消滅分割應辦理「解散登記」，權利義務由既存或新設公司概括承受（不需辦理清算程序）。</span>
+          </div>
+          <div class="procedure-item">
+            <span class="procedure-num">02</span>
+            <span class="procedure-text"><strong>公司之變更或成立：</strong>存續分割→被分割公司可能辦理章程變更登記；吸收分割→承受公司可能辦理變更登記；新設分割→依循公司成立程序。</span>
+          </div>
+          <div class="procedure-item">
+            <span class="procedure-num">03</span>
+            <span class="procedure-text"><strong>存續分割中被分割公司之債務清償責任：</strong>受讓公司就被分割公司所負債務，於受讓營業出資之範圍內負<strong>連帶清償責任</strong>；債權人 <strong>2 年</strong>內不行使而消滅。但分割部分之債務與被分割公司之債務可分者，不在此限。</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════ Section 09 對價 ════ -->
+  <div class="section reveal">
+    <div class="section-label">
+      <span class="section-num">Section 09</span>
+      <h2 class="section-title">併購之對價</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="term-block open">
+      <div class="term-header" onclick="toggle(this)">
+        <div class="term-accent accent-amber"></div>
+        <div class="term-name">四種對價形式</div>
+        <span class="term-chevron">▾</span>
+      </div>
+      <div class="term-body">
+        <div class="type-grid">
+          <div class="type-box blue">
+            <div class="type-label">現金</div>
+            <p>收購公司有大筆資金，或目標公司規模較小時常見。支付簡單清楚。</p>
+          </div>
+          <div class="type-box teal">
+            <div class="type-label">股票（換股）</div>
+            <p>大型併購案多採此方式。對收購公司可減少籌措現金成本；若預期合併後盈餘高於現金，目標公司股東亦樂於接受。</p>
+          </div>
+          <div class="type-box amber">
+            <div class="type-label">財產</div>
+            <p>被收購公司之財產亦得作為併購之對價。</p>
+          </div>
+          <div class="type-box purple">
+            <div class="type-label">混合使用</div>
+            <p>現行企併法開放公司於併購時使用「<strong>股份、現金及其他財產</strong>」混合作為對價。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <div class="footer-orn">
+    <div class="footer-gem"></div>
+    <div class="footer-gem"></div>
+    <div class="footer-gem"></div>
+  </div>
+</footer>
+
+<script>
+function toggle(header) {
+  header.parentElement.classList.toggle('open');
+}
+
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.06 });
+document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+(function() {
+  const saved = localStorage.getItem('nccu-theme');
+  if (saved === 'light') {
+    document.documentElement.classList.add('light');
+    document.getElementById('theme-btn').textContent = '☀️';
+  }
+})();
+
+function toggleTheme() {
+  const btn = document.getElementById('theme-btn');
+  const isLight = document.documentElement.classList.toggle('light');
+  btn.textContent = isLight ? '☀️' : '🌙';
+  localStorage.setItem('nccu-theme', isLight ? 'light' : 'dark');
+}
+</script>
+</body>
+</html>
